@@ -1,42 +1,41 @@
-FILE_IN = "in.txt"
+from solve import print_matrix
 
 
-def get_matrix_from_file():
-    # из файла
-    with open(FILE_IN, 'rt') as fin:
-        try:
-            n = int(fin.readline())
-            matrix = []
-            for line in fin:
-                new_row = list(map(float, line.strip().split()))
-                if len(new_row) != (n + 1):
-                    raise ValueError
-                matrix.append(new_row)
-            if len(matrix) != n:
-                raise ValueError
-        except ValueError:
-            return None
-    return matrix
+# Getting the matrix from user
+def get_matrix():
+    new_matrix = []
+    print('Лабораторная работа #1, вариант 23, Целиков Данил P3212')
+    print('Выберите режим: 0 - взять коэффициенты из файла, 1 - ввести коэффициенты с клавиатуры')
+    answer = int(input())
+    if answer == 1:
+        print('Размер матрицы?')
+        rows = int(input())
+
+        if rows != 1:
+            for i in range(rows):
+                a = []
+                for j in range(rows + 1):
+                    print('Элемент: строка', i + 1, ', столбец:', j + 1)
+                    a.append(float(input()))
+                new_matrix.append(a)
+            print('Ваша матрица:')
+            print(new_matrix)
+            return new_matrix
+        else:
+            print('Матрица должна быть 2x2, 3x3 ... 20x20! Попытайтесь еще!')
+            return get_matrix()
+    elif answer == 0:
+        print('Пожалуйста, введите имя вашего файла!')
+        return get_matrix_from_file(input())
+    else:
+        print('Что-то не так! Попытайтесь еще!')
+        return get_matrix()
 
 
-def get_matrix_from_manual_input():
-    # С клавиатуры
-    while True:
-        try:
-            n = int(input("Порядок матрицы: "))
-            if n <= 0:
-                print("Порядок матрицы должен быть положительным.")
-            else:
-                break
-        except ValueError:
-            print("Порядок матрицы должен быть целым числом.")
-    matrix = []
-    print("Коэффициенты матрицы:")
-    try:
-        for i in range(n):
-            matrix.append(list(map(float, input().strip().split())))
-            if len(matrix[i]) != (n + 1):
-                raise ValueError
-    except ValueError:
-        return None
-    return matrix
+# Getting matrix from the file by filename
+def get_matrix_from_file(filename):
+    with open(filename) as f:
+        matrix_from_file = [list(map(float, row.split())) for row in f.readlines()]
+    print('Матрица:')
+    print_matrix(matrix_from_file, 5)
+    return matrix_from_file
